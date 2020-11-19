@@ -1,5 +1,5 @@
 {
-  "name": "lithops-chart",
+  "name": "turbochart",
   "version": "1.0.0",
   "description": "",
   "main": ".eslintrc.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cenfun/lithops-chart.git"
+    "url": "git+https://github.com/cenfun/turbochart.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cenfun/lithops-chart/issues"
+    "url": "https://github.com/cenfun/turbochart/issues"
   },
-  "homepage": "https://github.com/cenfun/lithops-chart#readme",
+  "homepage": "https://github.com/cenfun/turbochart#readme",
   "devDependencies": {
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",

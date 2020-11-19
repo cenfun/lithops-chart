@@ -13,8 +13,7 @@ module.exports = {
     },
 
     "plugins": [
-        "chain",
-        "vue"
+        "chain"
     ],
 
     "extends": [
@@ -47,7 +46,7 @@ module.exports = {
             "after": true,
             "before": false
         }],
-        "complexity": ["error", 8],
+        //"complexity": ["error", 8],
         "curly": "error",
         "dot-location": ["error", "property"],
         "dot-notation": "error",
@@ -83,7 +82,7 @@ module.exports = {
         }],
         "max-nested-callbacks": ["error", 3],
         "max-params": ["error", 8],
-        "max-statements": ["error", 50],
+        //"max-statements": ["error", 50],
         "new-cap": ["error", {
             "newIsCap": true,
             "capIsNew": false,
