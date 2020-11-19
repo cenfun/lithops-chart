@@ -1,3 +1,5 @@
+import Util from "./util.js";
+
 const helper = {
 
     attr(elem, name, value) {
@@ -80,13 +82,9 @@ const helper = {
 
     getTipPath(t, l, s, x, y, w, h, r) {
         //get value from cache first
-        const key = Cacher.key("getTipPath", arguments);
-        if (Cacher.has(key)) {
-            return Cacher.get(key);
-        }
         //$.d(key);
         //init parameters
-        s = T.per(s);
+        s = Util.per(s);
         if (!w || !h) {
             return "";
         }
@@ -172,7 +170,7 @@ const helper = {
         //================================================
         const d = arr.join(" ");
         //set value to cache finally
-        return Cacher.set(key, d);
+        return d;
     },
 
     //get ellipse by 2 arc
@@ -207,7 +205,7 @@ const helper = {
     getEllipsePath(x, y, w, h, clockwise) {
         const kappa = 0.5522848;
         const p = this.point;
-        const f = T.numfix;
+        const f = Util.numFix;
         const c = ",";
         //
         const rx = f(w * 0.5, 1);
@@ -233,7 +231,7 @@ const helper = {
 
     getRectPath(x, y, w, h) {
         const p = this.point;
-        const f = T.numfix;
+        const f = Util.numFix;
         const arr = [`M${p(x, y)}`];
         arr.push(`h${f(w, 1)}`);
         arr.push(`v${f(h, 1)}`);
@@ -246,7 +244,7 @@ const helper = {
     getSettingPath(x, y, r) {
         const arr = [];
         const p = this.point;
-        const f = T.numfix;
+        const f = Util.numFix;
         const r1 = r;
         const r2 = r - 1.5;
         for (let i = 0; i <= 16; i++) {
@@ -258,7 +256,7 @@ const helper = {
             const y2 = r2 * Math.cos(d) + y + r;
             const p1 = p(f(x1, 1), f(y1, 1));
             const p2 = p(f(x2, 1), f(y2, 1));
-            if (i % 2 != 0) {
+            if (i % 2 !== 0) {
                 arr.push(`${cmd + p1}L${p2}`);
             } else {
                 arr.push(`${cmd + p2}L${p1}`);
@@ -269,14 +267,14 @@ const helper = {
 
     //get line data for svg format
     getElementData() {
-        const copy = T.merge.apply(this, arguments);
+        const copy = Util.merge.apply(this, arguments);
         //auto change to svg element parameter
         const out = {};
         for (let n in copy) {
             let v = copy[n];
             if (n === "lineWidth") {
                 n = "stroke-width";
-                v = T.tonum(v, true);
+                v = Util.toNum(v, true);
             } else if (n === "lineColor") {
                 n = "stroke";
             } else if (n === "fillColor") {
@@ -287,59 +285,12 @@ const helper = {
         return out;
     },
 
-    addGradientFill(renderer, data, id, color) {
-        const fill = data.fill;
-        if (typeof (fill) !== "object") {
-            return;
-        }
-        const types = {
-            linear: "linear",
-            radial: "radial"
-        };
-        const type = types[fill.type] || types.linear;
-        const defs = $(renderer.defs);
-        let def = defs.find(`#${id}`);
-        if (!def.length) {
-            def = $(renderer.create(`${type}Gradient`, {
-                id: id
-            }, defs));
-        }
-        if (type == types.radial) {
-            def.attr({
-                cx: fill.cx,
-                cy: fill.cy,
-                r: fill.r,
-                fx: fill.fx,
-                fy: fill.fy
-            });
-        } else {
-            def.attr({
-                x1: fill.x1,
-                x2: fill.x2,
-                y1: fill.y1,
-                y2: fill.y2
-            });
-        }
-        def.empty();
-        const stop = fill.stop;
-        if (T.islist(stop)) {
-            for (let i = 0, l = stop.length; i < l; i++) {
-                const item = stop[i];
-                if (color) {
-                    item["stop-color"] = color;
-                }
-                renderer.create("stop", item, def);
-            }
-        }
-        data.fill = `url(#${id})`;
-    },
-
     getLineWidth(data) {
         let width = 0;
         if (typeof (data) === "object") {
             const w = data["stroke-width"] || data.lineWidth;
             if (w !== undefined) {
-                width = T.tonum(w, true);
+                width = Util.toNum(w, true);
             } else if (data.stroke !== undefined) {
                 width = 1;
             }
@@ -348,7 +299,7 @@ const helper = {
     },
 
     //get svg rect
-    getBound(elem, scrollfix) {
+    getBound(elem) {
         const result = {
             top: 0,
             left: 0,
@@ -358,7 +309,7 @@ const helper = {
             height: 0
         };
         //if jquery
-        elem = T.jq2dom(elem);
+        elem = Util.jq2dom(elem);
         if (!elem) {
             return result;
         }
@@ -374,11 +325,6 @@ const helper = {
             for (const k in bound) {
                 result[k] = bound[k];
             }
-            if (scrollfix) {
-                const win = $(window);
-                result.left += win.scrollLeft();
-                result.top += win.scrollTop();
-            }
         }
         return result;
     },
@@ -391,7 +337,7 @@ const helper = {
             height: 0
         };
         //if jquery
-        elem = T.jq2dom(elem);
+        elem = Util.jq2dom(elem);
         if (!elem) {
             return result;
         }
@@ -418,29 +364,16 @@ const helper = {
         return result;
     },
 
-    contains(container, target) {
-        container = $(container).get(0);
-        target = $(target).get(0);
-        //(container, target);
-        if (!container || !target) {
-            return false;
-        }
-        if (container.compareDocumentPosition) {
-            return container.compareDocumentPosition(target) & 16;
-        }
-        return false;
-    },
-
     getPath() {
         const a = [];
         let n = false;
         for (let i = 0; i < arguments.length; i++) {
             const v = arguments[i];
-            if (T.isnum(v)) {
+            if (Util.isNum(v)) {
                 if (n) {
                     a.push(",");
                 }
-                a.push(T.numfix(v, 1));
+                a.push(Util.numFix(v, 1));
                 n = true;
             } else {
                 a.push(v);

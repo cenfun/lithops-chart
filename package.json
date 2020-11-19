@@ -2,9 +2,14 @@
   "name": "turbochart",
   "version": "1.0.0",
   "description": "",
-  "main": ".eslintrc.js",
+  "main": "dist/turbochart.js",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run lint && npx webpack",
+    "lint": "npx eslint ./src && npx stylelint ./src"
   },
   "repository": {
     "type": "git",
@@ -17,22 +22,22 @@
   },
   "homepage": "https://github.com/cenfun/turbochart#readme",
   "devDependencies": {
-    "@babel/core": "^7.11.1",
-    "@babel/preset-env": "^7.11.0",
-    "babel-loader": "^8.1.0",
-    "css-loader": "^4.2.1",
-    "eslint": "^7.7.0",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.2.1",
+    "css-loader": "^5.0.1",
+    "eslint": "^7.13.0",
     "eslint-plugin-chain": "^1.0.2",
-    "file-loader": "^6.0.0",
-    "sass": "^1.26.10",
-    "sass-loader": "^9.0.3",
-    "style-loader": "^1.2.1",
-    "stylelint": "^13.6.1",
+    "file-loader": "^6.2.0",
+    "sass": "^1.29.0",
+    "sass-loader": "^10.1.0",
+    "style-loader": "^2.0.0",
+    "stylelint": "^13.8.0",
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-standard": "^20.0.0",
-    "url-loader": "^4.1.0",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-stats-report": "^1.1.2"
+    "url-loader": "^4.1.1",
+    "webpack": "^5.5.1",
+    "webpack-cli": "^4.2.0",
+    "webpack-stats-report": "^1.1.4"
   }
 }
